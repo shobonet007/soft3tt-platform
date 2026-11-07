@@ -1,0 +1,3 @@
+const BASE=(process.env.CONVERSION_API_URL||"https://api.soft3tt.online").replace(/\\/$/,"");
+// VERIFY these three routes and multipart field names against the deployed Render API before production.
+export async function startLegacy(file:File,toolId:string){const f=new FormData();f.set("file",file);f.set("tool",toolId);f.set("toolId",toolId);const r=await fetch(`${BASE}/api/convert`,{method:"POST",body:f,signal:AbortSignal.timeout(Number(process.env.CONVERSION_API_TIMEOUT_MS||120000))});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||`Conversion API returned ${r.status}`);const id=d.jobId||d.id||d.job?.id;if(!id)throw new Error("Legacy API response has no job ID; update adapter to actual response.");return String(id)}

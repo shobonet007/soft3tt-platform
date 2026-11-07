@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import "./globals.css";export const metadata:Metadata={title:"Soft3TT — AI File Converter & Digital Tools",description:"Convert files and remove image backgrounds with Soft3TT."};export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}</body></html>}
