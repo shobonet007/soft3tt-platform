@@ -1,1 +1,101 @@
-export type Tool={id:string;name:string;description:string;kind:"conversion"|"background"};export const tools:Tool[]=[["mov-to-mp4","MOV to MP4","Convert MOV to MP4"],["mp4-to-webm","MP4 to WEBM","Convert MP4 to WEBM"],["video-to-mp3","Video to MP3","Extract audio"],["video-to-gif","Video to GIF","Create GIF"],["wav-to-mp3","WAV to MP3","Convert WAV to MP3"],["m4a-to-mp3","M4A to MP3","Convert M4A to MP3"],["jpg-to-png","JPG to PNG","Convert JPG to PNG"],["png-to-jpg","PNG to JPG","Convert PNG to JPG"],["webp-to-jpg","WEBP to JPG","Convert WEBP to JPG"],["heic-to-jpg","HEIC to JPG","Convert HEIC to JPG"],["jpg-to-pdf","JPG to PDF","Convert JPG to PDF"],["pdf-to-jpg","PDF to JPG","Convert PDF to JPG"],["word-to-pdf","Word to PDF","Convert Word to PDF"]].map(([id,name,description])=>({id,name,description,kind:"conversion" as const})).concat([{id:"background-remover",name:"AI Background Remover",description:"Remove or replace image backgrounds",kind:"background"}]);export const bySlug=(s:string)=>tools.find(t=>t.id===s);
+
+export type Tool = {
+  id: string;
+  name: string;
+  description: string;
+  kind: "conversion" | "background";
+};
+
+const conversionTools: Tool[] = [
+  {
+    id: "mov-to-mp4",
+    name: "MOV to MP4",
+    description: "Convert MOV to MP4",
+    kind: "conversion",
+  },
+  {
+    id: "mp4-to-webm",
+    name: "MP4 to WEBM",
+    description: "Convert MP4 to WEBM",
+    kind: "conversion",
+  },
+  {
+    id: "video-to-mp3",
+    name: "Video to MP3",
+    description: "Extract audio",
+    kind: "conversion",
+  },
+  {
+    id: "video-to-gif",
+    name: "Video to GIF",
+    description: "Create GIF",
+    kind: "conversion",
+  },
+  {
+    id: "wav-to-mp3",
+    name: "WAV to MP3",
+    description: "Convert WAV to MP3",
+    kind: "conversion",
+  },
+  {
+    id: "m4a-to-mp3",
+    name: "M4A to MP3",
+    description: "Convert M4A to MP3",
+    kind: "conversion",
+  },
+  {
+    id: "jpg-to-png",
+    name: "JPG to PNG",
+    description: "Convert JPG to PNG",
+    kind: "conversion",
+  },
+  {
+    id: "png-to-jpg",
+    name: "PNG to JPG",
+    description: "Convert PNG to JPG",
+    kind: "conversion",
+  },
+  {
+    id: "webp-to-jpg",
+    name: "WEBP to JPG",
+    description: "Convert WEBP to JPG",
+    kind: "conversion",
+  },
+  {
+    id: "heic-to-jpg",
+    name: "HEIC to JPG",
+    description: "Convert HEIC to JPG",
+    kind: "conversion",
+  },
+  {
+    id: "jpg-to-pdf",
+    name: "JPG to PDF",
+    description: "Convert JPG to PDF",
+    kind: "conversion",
+  },
+  {
+    id: "pdf-to-jpg",
+    name: "PDF to JPG",
+    description: "Convert PDF to JPG",
+    kind: "conversion",
+  },
+  {
+    id: "word-to-pdf",
+    name: "Word to PDF",
+    description: "Convert Word to PDF",
+    kind: "conversion",
+  },
+];
+
+export const tools: Tool[] = [
+  ...conversionTools,
+  {
+    id: "background-remover",
+    name: "AI Background Remover",
+    description: "Remove or replace image backgrounds",
+    kind: "background",
+  },
+];
+
+export const bySlug = (slug: string) =>
+  tools.find((tool) => tool.id === slug);
