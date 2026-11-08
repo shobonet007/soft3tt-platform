@@ -1,4 +1,3 @@
-
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
@@ -13,19 +12,20 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll();
         },
+
         setAll(
-          values: {
+          values: Array<{
             name: string;
             value: string;
-            options?: any;
-          }[]
+            options?: Parameters<typeof cookieStore.set>[2];
+          }>
         ) {
           try {
             values.forEach(({ name, value, options }) => {
               cookieStore.set(name, value, options);
             });
           } catch {
-            // Middleware handles cookie refresh when needed.
+            // Cookie updates may be unavailable in Server Components.
           }
         },
       },
