@@ -3,7 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function createClient() {
-  const c = await cookies();
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,22 +11,21 @@ export async function createClient() {
     {
       cookies: {
         getAll() {
-          return c.getAll();
+          return cookieStore.getAll();
         },
-
         setAll(
-          values: Array<{
+          values: {
             name: string;
             value: string;
-            options?: Parameters<typeof c.set>[2];
-          }>
+            options?: any;
+          }[]
         ) {
           try {
             values.forEach(({ name, value, options }) => {
-              c.set(name, value, options);
+              cookieStore.set(name, value, options);
             });
           } catch {
-            // Cookie updates may be unavailable in Server Components.
+            // Middleware handles cookie refresh when needed.
           }
         },
       },
