@@ -1,1 +1,10 @@
-import Link from "next/link";import {notFound} from "next/navigation";import {bySlug} from "@/lib/conversion/registry";export default async function ToolPage({params}:{params:Promise<{tool:string}>}){const {tool}=await params;const item=bySlug(tool);if(!item)notFound();return <main className="max-w-3xl mx-auto p-8"><Link href="/" className="text-blue-700">← Soft3TT</Link><h1 className="text-4xl font-black mt-8">{item.name}</h1><p className="mt-3 text-slate-500">{item.description}</p><p className="mt-8 rounded-xl bg-white border p-6">Upload and processing interface will be connected after the legacy API contract and worker are verified.</p></main>}
+import { notFound } from "next/navigation";
+import ConverterWorkbench from "@/components/converter-workbench";
+import { bySlug } from "@/lib/conversion/registry";
+
+export default async function ToolPage({ params }: { params: Promise<{ tool: string }> }) {
+  const { tool: slug } = await params;
+  const item = bySlug(slug);
+  if (!item || item.kind !== "conversion") notFound();
+  return <ConverterWorkbench tool={item} />;
+}

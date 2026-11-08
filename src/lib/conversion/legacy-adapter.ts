@@ -1,3 +1,36 @@
 const BASE = (process.env.CONVERSION_API_URL || "https://api.soft3tt.online").replace(/\/$/, "");
-// VERIFY these three routes and multipart field names against the deployed Render API before production.
-export async function startLegacy(file:File,toolId:string){const f=new FormData();f.set("file",file);f.set("tool",toolId);f.set("toolId",toolId);const r=await fetch(`${BASE}/api/convert`,{method:"POST",body:f,signal:AbortSignal.timeout(Number(process.env.CONVERSION_API_TIMEOUT_MS||120000))});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||`Conversion API returned ${r.status}`);const id=d.jobId||d.id||d.job?.id;if(!id)throw new Error("Legacy API response has no job ID; update adapter to actual response.");return String(id)}
+
+export type LegacyConversionResult = {
+  ok: true;
+  jobId: string;
+  tool: string;
+  downloadUrl: string;
+  filename: string;
+  expiresInMinutes: number;
+};
+
+// Render runs the conversion synchronously. There is no separate status endpoint.
+export async function startLegacy(file: File, toolId: string, options: { quality?: string; audio?: string } = {}): Promise<LegacyConversionResult> {
+  const form = new FormData();
+  form.set("file", file);
+  form.set("tool", toolId);
+  if (options.quality) form.set("quality", options.quality);
+  if (options.audio) form.set("audio", options.audio);
+
+  const response = await fetch(BASE + "/api/convert", {
+    method: "POST",
+    body: form,
+    signal: AbortSignal.timeout(Number(process.env.CONVERSION_API_TIMEOUT_MS || 12 * 60 * 1000)),
+  });
+  const payload = await response.json().catch(() => null) as (Partial<LegacyConversionResult> & { message?: string }) | null;
+  if (!response.ok || !payload?.ok) throw new Error(payload?.message || "Conversion API returned HTTP " + response.status);
+  if (!payload.jobId || !payload.downloadUrl || !payload.filename) throw new Error("Conversion API returned an incomplete success response.");
+  return {
+    ok: true,
+    jobId: payload.jobId,
+    tool: payload.tool || toolId,
+    downloadUrl: payload.downloadUrl,
+    filename: payload.filename,
+    expiresInMinutes: Number(payload.expiresInMinutes) || 60,
+  };
+}

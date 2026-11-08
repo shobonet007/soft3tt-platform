@@ -1,3 +1,80 @@
 import Link from "next/link";
-const groups=[["Image tools",[["AI Background Remover","Remove or replace image backgrounds","/tools/background-remover"],["JPG to PNG","Convert JPG images to PNG","/tools/jpg-to-png"],["PNG to JPG","Convert PNG images to JPG","/tools/png-to-jpg"],["WEBP to JPG","Convert WEBP images to JPG","/tools/webp-to-jpg"]]],["Video tools",[["MOV to MP4","Convert MOV videos to MP4","/tools/mov-to-mp4"],["MP4 to WEBM","Convert MP4 videos to WEBM","/tools/mp4-to-webm"],["Video to MP3","Extract audio from video","/tools/video-to-mp3"],["Video to GIF","Create GIFs from video","/tools/video-to-gif"]]],["Audio tools",[["WAV to MP3","Convert WAV audio to MP3","/tools/wav-to-mp3"],["M4A to MP3","Convert M4A audio to MP3","/tools/m4a-to-mp3"]]],["Document tools",[["Word to PDF","Convert Word documents to PDF","/tools/word-to-pdf"],["JPG to PDF","Convert images to PDF","/tools/jpg-to-pdf"],["PDF to JPG","Convert PDF pages to images","/tools/pdf-to-jpg"]]]];
-export default function Home(){return <main><header className="bg-white border-b"><div className="max-w-7xl mx-auto p-5 flex justify-between"><Link href="/" className="font-black text-2xl text-blue-700">Soft3TT.</Link><nav className="flex gap-5 text-sm"><a href="#tools">All tools</a><Link href="/workspace">My workspace</Link><Link href="/auth/sign-in">Sign in</Link></nav></div></header><section className="bg-gradient-to-br from-slate-950 to-blue-800 text-white text-center px-6 py-20"><h1 className="text-5xl font-black">Make files work for you.</h1><p className="max-w-2xl mx-auto mt-5 text-blue-100">Convert images, video, audio and documents. Remove image backgrounds with AI — all in one workspace.</p><Link className="inline-block mt-8 bg-white text-blue-800 rounded-xl px-6 py-3 font-bold" href="/tools/background-remover">Try AI Background Remover</Link></section><section id="tools" className="max-w-7xl mx-auto px-6 py-14"><h2 className="text-3xl font-black mb-8">Tools for every file</h2><div className="grid md:grid-cols-2 gap-7">{groups.map(([title,items])=><section key={title as string} className="bg-white border rounded-2xl p-6"><h3 className="font-bold text-xl mb-4">{title}</h3><div className="grid sm:grid-cols-2 gap-3">{(items as string[][]).map(t=><Link key={t[0]} href={t[2]} className="border rounded-xl p-4 hover:border-blue-400"><b>{t[0]}</b><p className="text-sm text-slate-500 mt-2">{t[1]}</p></Link>)}</div></section>)}</div></section></main>}
+
+type ToolCard = { name: string; description: string; href: string };
+type ToolGroup = { title: string; items: ToolCard[] };
+
+const groups: ToolGroup[] = [
+  {
+    title: "Image tools",
+    items: [
+      { name: "AI Background Remover", description: "Remove or replace image backgrounds", href: "/tools/background-remover" },
+      { name: "JPG to PNG", description: "Convert JPG images to PNG", href: "/tools/jpg-to-png" },
+      { name: "PNG to JPG", description: "Convert PNG images to JPG", href: "/tools/png-to-jpg" },
+      { name: "WEBP to JPG", description: "Convert WEBP images to JPG", href: "/tools/webp-to-jpg" },
+      { name: "HEIC to JPG", description: "Convert HEIC images to JPG", href: "/tools/heic-to-jpg" },
+      { name: "JPG to PDF", description: "Convert JPG images to PDF", href: "/tools/jpg-to-pdf" },
+      { name: "PDF to JPG", description: "Convert the first PDF page to JPG", href: "/tools/pdf-to-jpg" },
+    ],
+  },
+  {
+    title: "Video tools",
+    items: [
+      { name: "MOV to MP4", description: "Convert MOV videos to MP4", href: "/tools/mov-to-mp4" },
+      { name: "MP4 to WEBM", description: "Convert MP4 videos to WEBM", href: "/tools/mp4-to-webm" },
+      { name: "Video to MP3", description: "Extract audio from video", href: "/tools/video-to-mp3" },
+      { name: "MP4 to MP3", description: "Extract audio from MP4", href: "/tools/mp4-to-mp3" },
+      { name: "Video to GIF", description: "Create GIFs from video", href: "/tools/video-to-gif" },
+    ],
+  },
+  {
+    title: "Audio tools",
+    items: [
+      { name: "WAV to MP3", description: "Convert WAV audio to MP3", href: "/tools/wav-to-mp3" },
+      { name: "M4A to MP3", description: "Convert M4A audio to MP3", href: "/tools/m4a-to-mp3" },
+    ],
+  },
+  {
+    title: "Document tools",
+    items: [{ name: "Word to PDF", description: "Convert DOC/DOCX documents to PDF", href: "/tools/word-to-pdf" }],
+  },
+];
+
+export default function Home() {
+  return (
+    <main>
+      <header className="border-b bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-between p-5">
+          <Link href="/" className="text-2xl font-black text-blue-700">Soft3TT.</Link>
+          <nav className="flex gap-5 text-sm">
+            <a href="#tools">All tools</a>
+            <Link href="/workspace">My workspace</Link>
+            <Link href="/auth/sign-in">Sign in</Link>
+          </nav>
+        </div>
+      </header>
+      <section className="bg-gradient-to-br from-slate-950 to-blue-800 px-6 py-20 text-center text-white">
+        <h1 className="text-4xl font-black md:text-5xl">Make files work for you.</h1>
+        <p className="mx-auto mt-5 max-w-2xl text-blue-100">Convert images, video, audio and documents using the Soft3TT conversion service. Remove image backgrounds with AI in a dedicated workspace.</p>
+        <Link className="mt-8 inline-block rounded-xl bg-white px-6 py-3 font-bold text-blue-800" href="/tools/background-remover">Try AI Background Remover</Link>
+      </section>
+      <section id="tools" className="mx-auto max-w-7xl px-6 py-14">
+        <h2 className="mb-8 text-3xl font-black">Tools for every file</h2>
+        <div className="grid gap-7 md:grid-cols-2">
+          {groups.map((group) => (
+            <section key={group.title} className="rounded-2xl border bg-white p-6">
+              <h3 className="mb-4 text-xl font-bold">{group.title}</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {group.items.map((item) => (
+                  <Link key={item.href} href={item.href} className="rounded-xl border p-4 hover:border-blue-400 hover:bg-blue-50">
+                    <b>{item.name}</b>
+                    <p className="mt-2 text-sm text-slate-500">{item.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
